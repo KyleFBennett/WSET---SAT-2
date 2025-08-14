@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wine Tasting App</title>
+<style>
+    body { 
+        font-family: Arial, sans-serif; 
+        margin: 0; 
+        background-color: #faf7f5; 
+        display: flex; 
+        justify-content: center; 
+        flex-direction: column; /* stack vertically */
+        align-items: center;
+    }
+    .container { 
+        max-width: 600px; 
+        width: 100%; 
+        padding: 20px; 
+        text-align: center; 
+    }
+    h2 { 
+        font-size: 1.8rem; 
+        color: #800020; 
+        margin-top: 40px; 
+        border-bottom: 2px solid #800020; 
+        padding-bottom: 5px;
+    }
+    label { 
+        display: block; 
+        margin-top: 15px; 
+        font-weight: bold; 
+        font-size: 1.1rem;
+    }
+    input, button { font-size: 1rem; }
+    .btn-group { 
+        display: flex; 
+        flex-wrap: wrap; 
+        justify-content: center; 
+        gap: 10px; 
+        margin-top: 10px;
+    }
+    .btn-option { 
+        padding: 8px 12px; 
+        border: 2px solid #800020; 
+        background-color: white; 
+        color: #800020; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        min-width: 80px; 
+        transition: 0.2s;
+    }
+    .btn-option.selected { 
+        background-color: #800020; 
+        color: white;
+    }
+    .subcategory-group { margin-left: 15px; margin-top: 8px; }
+    .aroma-options { margin-left: 30px; margin-top: 5px; }
+    .flavour-button { 
+        font-size: 0.85rem; 
+        padding: 4px 8px; 
+        border: 1px solid #ccc; 
+        background-color: #f8f8f8; 
+        border-radius: 6px; 
+        cursor: pointer; 
+        margin: 2px; 
+        transition: 0.2s;
+    }
+    .flavour-button.selected { 
+        background-color: #800020; 
+        color: white; 
+        border-color: #800020;
+    }
+    .flavour-button:hover { background-color: #e0e0e0; }
+    /* Make all inputs the same height as buttons */
+    input[type="text"],
+    input[type="number"],
+    input[type="date"] {
+        width: 100%;
+        max-width: 500px;
+        padding: 8px 12px;
+        font-size: 1rem;
+        height: 40px; /* same as button height */
+        box-sizing: border-box;
+        border: 2px solid #800020;
+        border-radius: 5px;
+    }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<!------------------------------------- Wine Bottle ------------------------------------->
+
+<h2>Wine Bottle Information</h2>
+<label for="wineName">Wine Bottle Name</label>
+<input type="text" id="wineName">
+<label for="farm">Farm</label>
+<input type="text" id="farm">
+<label for="varietal">Varietal</label>
+<input type="text" id="varietal">
+<label for="vintage">Vintage</label>
+<input type="number" id="vintage" min="1900" max="2100">
+<label for="region">Region</label>
+<input type="text" id="region">
+<label for="price">Price (R)</label>
+<input type="number" id="price" step="0.01">
+<label for="tastingDate">Date Tasting</label>
+<input type="date" id="tastingDate">
+
+<h2>Appearance</h2>
+<label>Intensity</label>
+<div class="btn-group" id="intensityGroup">
+    <button type="button" class="btn-option">Pale</button>
+    <button type="button" class="btn-option selected">Medium</button>
+    <button type="button" class="btn-option">Deep</button>
+</div>
+
+<label>Wine Type</label>
+<div class="btn-group" id="wineTypeGroup">
+    <button type="button" class="btn-option" data-type="White">White</button>
+    <button type="button" class="btn-option" data-type="Rosé">Rosé</button>
+    <button type="button" class="btn-option" data-type="Red">Red</button>
+</div>
+
+<div id="colourSection" style="display:none;">
+    <label>Colour</label>
+    <div class="btn-group" id="colourGroup"></div>
+</div>
+
+<!------------------------------------- Nose ------------------------------------->
+
+<h2>Nose</h2>
+<label>Intensity</label>
+<div class="btn-group" id="noseIntensity">
+    <button type="button" class="btn-option">Light</button>
+    <button type="button" class="btn-option selected">Medium</button>
+    <button type="button" class="btn-option">Pronounced</button>
+</div>
+
+<label>Aroma Categories</label>
+<div class="btn-group" id="aromaCategories">
+    <button type="button" class="btn-option" data-category="Primary">Primary</button>
+    <button type="button" class="btn-option" data-category="Secondary">Secondary</button>
+    <button type="button" class="btn-option" data-category="Tertiary">Tertiary</button>
+</div>
+<div id="aromaSection"></div>
+
+<!------------------------------------- Palate ------------------------------------->
+
+<h2>Palate</h2>
+<label>Sweetness</label>
+<div class="btn-group" id="sweetnessGroup">
+    <button type="button" class="btn-option">Dry</button>
+    <button type="button" class="btn-option selected">Off-Dry</button>
+    <button type="button" class="btn-option">Medium</button>
+    <button type="button" class="btn-option">Sweet</button>
+</div>
+
+<label>Acidity</label>
+<div class="btn-group" id="acidityGroup">
+    <button type="button" class="btn-option">Low</button>
+    <button type="button" class="btn-option selected">Medium</button>
+    <button type="button" class="btn-option">High</button>
+</div>
+
+<label>Tannin</label>
+<div class="btn-group" id="tanninGroup">
+    <button type="button" class="btn-option">Low</button>
+    <button type="button" class="btn-option selected">Medium</button>
+    <button type="button" class="btn-option">High</button>
+</div>
+
+<label>Alcohol</label>
+<div class="btn-group" id="alcoholGroup">
+    <button type="button" class="btn-option">Low</button>
+    <button type="button" class="btn-option selected">Medium</button>
+    <button type="button" class="btn-option">High</button>
+</div>
+
+<label>Body</label>
+<div class="btn-group" id="bodyGroup">
+    <button type="button" class="btn-option">Light</button>
+    <button type="button" class="btn-option selected">Medium</button>
+    <button type="button" class="btn-option">Full</button>
+</div>
+
+<label>Flavour Intensity</label>
+<div class="btn-group" id="flavourIntensityGroup">
+    <button type="button" class="btn-option">Light</button>
+    <button type="button" class="btn-option selected">Medium</button>
+    <button type="button" class="btn-option">Pronounced</button>
+</div>
+
+<label>Finish</label>
+<div class="btn-group" id="finishGroup">
+    <button type="button" class="btn-option">Short</button>
+    <button type="button" class="btn-option selected">Medium</button>
+    <button type="button" class="btn-option">Long</button>
+</div>
+
+<label>Flavour Characteristics</label>
+<div class="btn-group" id="palateCategories">
+    <button type="button" class="btn-option" data-category="Primary">Primary</button>
+    <button type="button" class="btn-option" data-category="Secondary">Secondary</button>
+    <button type="button" class="btn-option" data-category="Tertiary">Tertiary</button>
+</div>
+<div id="palateSection"></div>
+
+<!------------------------------------- Conclusion ------------------------------------->
+
+<h2>Conclusion</h2>
+<label>Quality</label>
+<div class="btn-group" id="qualityGroup">
+    <button type="button" class="btn-option">Poor</button>
+    <button type="button" class="btn-option">Acceptable</button>
+    <button type="button" class="btn-option selected">Good</button>
+    <button type="button" class="btn-option">Very Good</button>
+    <button type="button" class="btn-option">Outstanding</button>
+</div>
+
+<label>Ageability</label>
+<div class="btn-group" id="ageabilityGroup">
+    <button type="button" class="btn-option">Too Young</button>
+    <button type="button" class="btn-option selected">Drinking Well Now</button>
+    <button type="button" class="btn-option">Past Prime</button>
+</div>
+
+<label>Bottle Affordability</label>
+<div class="btn-group" id="affordabilityGroup">
+    <button type="button" class="btn-option">Bargain</button>
+    <button type="button" class="btn-option selected">Fairly Priced</button>
+    <button type="button" class="btn-option">Overpriced</button>
+</div>
+
+<label>Score (out of 100)</label>
+<input type="number" id="score" min="0" max="100" step="1" placeholder="Enter score">
+
+</div> <!-- end container -->
+
+<script>
+// Set today's date
+document.getElementById("tastingDate").value = new Date().toISOString().split('T')[0];
+
+// Generic single-select logic
+function setupButtonGroup(groupId){
+    const group = document.getElementById(groupId);
+    group.addEventListener("click", e=>{
+        if(e.target.classList.contains("btn-option")){
+            [...group.children].forEach(btn=>btn.classList.remove("selected"));
+            e.target.classList.add("selected");
+        }
+    });
+}
+
+// Setup all button groups
+["intensityGroup","wineTypeGroup","noseIntensity","sweetnessGroup","acidityGroup","tanninGroup","alcoholGroup","bodyGroup","flavourIntensityGroup","finishGroup","qualityGroup","ageabilityGroup","affordabilityGroup"].forEach(setupButtonGroup);
+
+// Wine type -> colour
+const colourSection = document.getElementById("colourSection");
+const colourGroup = document.getElementById("colourGroup");
+const colourOptions = { "White":["Lemon","Gold","Amber"], "Rosé":["Pink","Pink-Orange","Orange"], "Red":["Purple","Ruby","Garnet","Tawny"] };
+document.getElementById("wineTypeGroup").addEventListener("click", e=>{
+    if(e.target.classList.contains("btn-option")){
+        const wineType = e.target.getAttribute("data-type");
+        colourGroup.innerHTML="";
+        colourOptions[wineType].forEach(colour=>{
+            const btn=document.createElement("button");
+            btn.type="button"; btn.className="btn-option"; btn.textContent=colour; 
+            btn.dataset.value=colour;
+            btn.addEventListener("click",()=>{ [...colourGroup.children].forEach(b=>b.classList.remove("selected")); btn.classList.add("selected"); });
+            colourGroup.appendChild(btn);
+        });
+        colourSection.style.display="block";
+    }
+});
+
+// Aroma and palate logic (unchanged)
+const aromaData = {
+    "Primary": {"Floral":["Blossom","Rose","Violet"],"Green fruit":["Apple","Pear","Gooseberry","Grape"],"Citrus fruit":["Grapefruit","Lemon","Lime","Orange"],"Stone fruit":["Peach","Apricot","Nectarine"],"Tropical fruit":["Banana","Lychee","Mango","Melon","Passion Fruit","Pineapple"],"Red fruit":["Redcurrant","Cranberry","Raspberry","Strawberry","Red Cherry","Red Plum"],"Black fruit":["Blackcurrant","Blackberry","Blueberry","Black Cherry","Black Plum"],"Herbaceous":["Green Bell Pepper","Grass","Tomato Leaf","Asparagus"],"Herbal":["Eucalyptus","Mint","Fennel","Dill","Dried Herbs"],"Spice":["Black Pepper","White Pepper","Liquorice"],"Fruit ripeness":["Unripe Fruit","Ripe Fruit","Dried Fruit","Cooked Fruit"],"Other":["Wet Stones","Candy"]},
+    "Secondary":{"Yeast":["Biscuit","Pastry","Bread","Toasted Bread","Bread Dough","Cheese","Yogurt"],"Malolactic conversion":["Butter","Cream","Cheese"],"Oak":["Vanilla","Cloves","Coconut","Cedar","Charred Wood","Smoke","Chocolate","Coffee"]},
+    "Tertiary":{"Red wine":["Dried Fruit","Leather","Earth","Mushroom","Meat","Tobacco","Wet Leaves","Forest Floor","Caramel"],"White wine":["Dried Fruit","Orange Marmalade","Petrol","Cinnamon","Ginger","Nutmeg","Almond","Hazelnut","Honey","Caramel"],"Deliberately oxidised wines":["Almond","Hazelnut","Walnut","Chocolate","Coffee","Caramel"]}};
+
+// Nose
+const aromaSection=document.getElementById("aromaSection");
+document.getElementById("aromaCategories").addEventListener("click", e=>{
+    if(e.target.classList.contains("btn-option")){
+        const category=e.target.dataset.category;
+        e.target.classList.toggle("selected");
+        let existing=document.getElementById(`sub-${category}`);
+        if(existing){existing.remove(); return;}
+        const subDiv=document.createElement("div");
+        subDiv.id=`sub-${category}`; subDiv.className="subcategory-group";
+        for(let subCat in aromaData[category]){
+            const subBtn=document.createElement("button");
+            subBtn.className="btn-option"; subBtn.textContent=subCat;
+            subBtn.addEventListener("click", function(){
+                subBtn.classList.toggle("selected");
+                let aromaList=document.getElementById(`aromas-${subCat}`);
+                if(aromaList){aromaList.remove(); return;}
+                const aromaDiv=document.createElement("div");
+                aromaDiv.id=`aromas-${subCat}`; aromaDiv.className="aroma-options";
+                aromaData[category][subCat].forEach(aroma=>{
+                    const aromaBtn=document.createElement("button");
+                    aromaBtn.className="flavour-button"; aromaBtn.textContent=aroma;
+                    aromaBtn.addEventListener("click",()=>{ aromaBtn.classList.toggle("selected"); });
+                    aromaDiv.appendChild(aromaBtn);
+                });
+                subBtn.insertAdjacentElement("afterend",aromaDiv);
+            });
+            subDiv.appendChild(subBtn);
+        }
+        aromaSection.appendChild(subDiv);
+    }
+});
+
+// Palate
+const palateData = aromaData; 
+const palateSection = document.getElementById("palateSection");
+document.getElementById("palateCategories").addEventListener("click", e=>{
+    if(e.target.classList.contains("btn-option")){
+        const category=e.target.dataset.category;
+        e.target.classList.toggle("selected");
+        let existing=document.getElementById(`palate-sub-${category}`);
+        if(existing){existing.remove(); return;}
+        const subDiv=document.createElement("div");
+        subDiv.id=`palate-sub-${category}`; subDiv.className="subcategory-group";
+        for(let subCat in palateData[category]){
+            const subBtn=document.createElement("button");
+            subBtn.className="btn-option"; subBtn.textContent=subCat;
+            subBtn.addEventListener("click", function(){
+                subBtn.classList.toggle("selected");
+                let aromaList=document.getElementById(`palate-aromas-${subCat}`);
+                if(aromaList){aromaList.remove(); return;}
+                const aromaDiv=document.createElement("div");
+                aromaDiv.id=`palate-aromas-${subCat}`; aromaDiv.className="aroma-options";
+                palateData[category][subCat].forEach(aroma=>{
+                    const aromaBtn=document.createElement("button");
+                    aromaBtn.className="flavour-button"; aromaBtn.textContent=aroma;
+                    aromaBtn.addEventListener("click",()=>{ aromaBtn.classList.toggle("selected"); });
+                    aromaDiv.appendChild(aromaBtn);
+                });
+                subBtn.insertAdjacentElement("afterend",aromaDiv);
+            });
+            subDiv.appendChild(subBtn);
+        }
+        palateSection.appendChild(subDiv);
+    }
+});
+</script>
+</body>
+</html>
+
+<!------------------------------------- Save Button ------------------------------------->
+
+<button id="saveBtn" class="btn-option" style="margin-top:20px; padding:12px 22px; font-size:1.1rem;">
+    Save Tasting
+</button>
+
+<script>
+// Helper to get selected button text from a group
+function getSelectedText(groupId){
+    const group = document.getElementById(groupId);
+    const selected = [...group.children].find(btn => btn.classList.contains("selected"));
+    return selected ? selected.textContent : "";
+}
+
+// Helper to get multiple selected buttons in a container (for flavours/aromas)
+function getMultipleSelected(containerId){
+    const container = document.getElementById(containerId);
+    if(!container) return [];
+    return [...container.querySelectorAll(".flavour-button.selected")].map(btn => btn.textContent);
+}
+
+// Recursive function to extract all selected aromas/flavours in a section
+function extractFlavours(section){
+    const lines = [];
+    section.querySelectorAll(".subcategory-group").forEach(sub=>{
+        const subBtns = sub.querySelectorAll(".btn-option.selected");
+        subBtns.forEach(btn=>{
+            lines.push(btn.textContent + ": " + getMultipleSelected(btn.nextElementSibling?.id || ""));
+        });
+    });
+    return lines.filter(line => line.split(": ")[1]); // only lines with selected items
+}
+
+// Save button click
+document.getElementById("saveBtn").addEventListener("click", ()=>{
+    let content = "";
+
+    // Wine Info
+    content += "Wine Bottle Information\n----------------------\n";
+    ["wineName","farm","varietal","vintage","region","price","tastingDate"].forEach(id=>{
+        content += document.getElementById(id).previousElementSibling.textContent + ": " + document.getElementById(id).value + "\n";
+    });
+
+    // Appearance
+    content += "\nAppearance\n----------\n";
+    content += "Intensity: " + getSelectedText("intensityGroup") + "\n";
+    content += "Wine Type: " + getSelectedText("wineTypeGroup") + "\n";
+    content += "Colour: " + getSelectedText("colourGroup") + "\n";
+
+    // Nose
+    content += "\nNose\n----\n";
+    content += "Intensity: " + getSelectedText("noseIntensity") + "\n";
+    content += "Aromas:\n" + extractFlavours(document.getElementById("aromaSection")).map(line=>"  - "+line).join("\n") + "\n";
+
+    // Palate
+    content += "\nPalate\n------\n";
+    ["sweetnessGroup","acidityGroup","tanninGroup","alcoholGroup","bodyGroup","flavourIntensityGroup","finishGroup"].forEach(id=>{
+        content += document.getElementById(id).previousElementSibling.textContent + ": " + getSelectedText(id) + "\n";
+    });
+    content += "Flavours:\n" + extractFlavours(document.getElementById("palateSection")).map(line=>"  - "+line).join("\n") + "\n";
+
+    // Conclusion
+    content += "\nConclusion\n----------\n";
+    ["qualityGroup","ageabilityGroup","affordabilityGroup"].forEach(id=>{
+        content += document.getElementById(id).previousElementSibling.textContent + ": " + getSelectedText(id) + "\n";
+    });
+    content += "Score: " + document.getElementById("score").value + "\n";
+
+    // Construct filename: YYYY-MM-DD_Farm_WineName.txt
+    const date = document.getElementById("tastingDate").value || "date";
+    const farm = document.getElementById("farm").value.replace(/\s+/g, "_") || "farm";
+    const wineName = document.getElementById("wineName").value.replace(/\s+/g, "_") || "wine";
+    const filename = `${date}_${farm}_${wineName}.txt`;
+
+    // Save as file
+    const blob = new Blob([content], {type: "text/plain"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+});
+</script>
+
+<style>
+/* Make Save button match other btn-option styles */
+#saveBtn {
+    border: 2px solid #800020;
+    border-radius: 5px;
+    background-color: white;
+    color: #800020;
+    transition: 0.2s;
+    margin-bottom: 40px; /* padding below the button */
+    width: 500px; /* set the desired width */
+}
+#saveBtn:hover {
+    background-color: #800020;
+    color: white;
+}
+
+</style>
+
